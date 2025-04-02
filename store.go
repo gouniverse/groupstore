@@ -15,8 +15,8 @@ type store struct {
 	// groupTableName is the name of the group table
 	groupTableName string
 
-	// entityGroupTableName is the name of the group entity relation table
-	entityGroupTableName string
+	// groupEntityRelationTableName is the name of the group entity relation table
+	groupEntityRelationTableName string
 
 	// db is the underlying database connection
 	db *sql.DB
@@ -58,10 +58,10 @@ func (store *store) AutoMigrate() error {
 		return err
 	}
 
-	sqlStr = store.sqlEntityGroupTableCreate()
+	sqlStr = store.sqlGroupEntityRelationTableCreate()
 
 	if sqlStr == "" {
-		return errors.New("groupstore: entity group table create sql is empty")
+		return errors.New("groupstore: group entity relation table create sql is empty")
 	}
 
 	_, err = store.db.Exec(sqlStr)

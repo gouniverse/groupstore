@@ -32,7 +32,7 @@ func TestStoreEntityGroupCount(t *testing.T) {
 		t.Fatal("unexpected count:", count)
 	}
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -53,7 +53,7 @@ func TestStoreEntityGroupCount(t *testing.T) {
 		t.Fatal("unexpected count:", count)
 	}
 
-	entityGroup2 := NewEntityGroup().
+	entityGroup2 := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_02").
 		SetGroupID("PERMISSION_02")
@@ -88,7 +88,7 @@ func TestStoreEntityGroupCreate(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -113,7 +113,7 @@ func TestStoreEntityGroupCreate_Duplicate(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -144,7 +144,7 @@ func TestStoreEntityGroupDelete(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -197,7 +197,7 @@ func TestStoreEntityGroupDeleteByID(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -250,7 +250,7 @@ func TestStoreEntityGroupFindByEntityAndGroup(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -322,7 +322,7 @@ func TestStoreEntityGroupFindByID(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -395,17 +395,17 @@ func TestStoreEntityGroupList(t *testing.T) {
 		}
 	}()
 
-	entityGroup1 := NewEntityGroup().
+	entityGroup1 := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	entityGroup2 := NewEntityGroup().
+	entityGroup2 := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_02").
 		SetGroupID("PERMISSION_02")
 
-	entityGroups := []EntityGroupInterface{
+	entityGroups := []GroupEntityRelationInterface{
 		entityGroup1,
 		entityGroup2,
 	}
@@ -451,7 +451,7 @@ func TestStoreEntityGroupSoftDelete(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -517,7 +517,7 @@ func TestStoreEntityGroupSoftDeleteByID(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewEntityGroup().
+	entityGroup := NewGroupEntityRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")

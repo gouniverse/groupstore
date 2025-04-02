@@ -13,8 +13,8 @@ type NewStoreOptions struct {
 	// GroupTableName is the name of the group table
 	GroupTableName string
 
-	// EntityGroupTableName is the name of the entity to group relation table
-	EntityGroupTableName string
+	// GroupEntityRelationTableName is the name of the entity to group relation table
+	GroupEntityRelationTableName string
 
 	// DB is the underlying database connection
 	DB *sql.DB
@@ -38,8 +38,8 @@ func NewStore(opts NewStoreOptions) (StoreInterface, error) {
 		return nil, errors.New("group store: GroupTableName is required")
 	}
 
-	if opts.EntityGroupTableName == "" {
-		return nil, errors.New("group store: EntityGroupTableName is required")
+	if opts.GroupEntityRelationTableName == "" {
+		return nil, errors.New("group store: GroupEntityRelationTableName is required")
 	}
 
 	if opts.DB == nil {
@@ -55,13 +55,13 @@ func NewStore(opts NewStoreOptions) (StoreInterface, error) {
 	}
 
 	store := &store{
-		groupTableName:       opts.GroupTableName,
-		entityGroupTableName: opts.EntityGroupTableName,
-		automigrateEnabled:   opts.AutomigrateEnabled,
-		db:                   opts.DB,
-		dbDriverName:         opts.DbDriverName,
-		debugEnabled:         opts.DebugEnabled,
-		sqlLogger:            opts.SqlLogger,
+		groupTableName:               opts.GroupTableName,
+		groupEntityRelationTableName: opts.GroupEntityRelationTableName,
+		automigrateEnabled:           opts.AutomigrateEnabled,
+		db:                           opts.DB,
+		dbDriverName:                 opts.DbDriverName,
+		debugEnabled:                 opts.DebugEnabled,
+		sqlLogger:                    opts.SqlLogger,
 	}
 
 	if store.automigrateEnabled {

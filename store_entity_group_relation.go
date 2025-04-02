@@ -51,7 +51,7 @@ func (store *store) EntityGroupCount(ctx context.Context, options EntityGroupQue
 	return i, nil
 }
 
-func (store *store) EntityGroupCreate(ctx context.Context, entityGroup EntityGroupInterface) error {
+func (store *store) EntityGroupCreate(ctx context.Context, entityGroup GroupEntityRelationInterface) error {
 	if entityGroup == nil {
 		return errors.New("groupstore > EntityGroupCreate. entityGroup is nil")
 	}
@@ -89,7 +89,7 @@ func (store *store) EntityGroupCreate(ctx context.Context, entityGroup EntityGro
 	data := entityGroup.Data()
 
 	sqlStr, params, errSql := goqu.Dialect(store.dbDriverName).
-		Insert(store.entityGroupTableName).
+		Insert(store.groupEntityRelationTableName).
 		Prepared(true).
 		Rows(data).
 		ToSQL()
@@ -115,7 +115,7 @@ func (store *store) EntityGroupCreate(ctx context.Context, entityGroup EntityGro
 	return nil
 }
 
-func (store *store) EntityGroupDelete(ctx context.Context, entityGroup EntityGroupInterface) error {
+func (store *store) EntityGroupDelete(ctx context.Context, entityGroup GroupEntityRelationInterface) error {
 	if entityGroup == nil {
 		return errors.New("entityGroup is nil")
 	}
@@ -129,7 +129,7 @@ func (store *store) EntityGroupDeleteByID(ctx context.Context, id string) error 
 	}
 
 	sqlStr, params, errSql := goqu.Dialect(store.dbDriverName).
-		Delete(store.entityGroupTableName).
+		Delete(store.groupEntityRelationTableName).
 		Prepared(true).
 		Where(goqu.C(COLUMN_ID).Eq(id)).
 		ToSQL()
@@ -150,7 +150,7 @@ func (store *store) EntityGroupFindByEntityAndGroup(
 	entityType string,
 	entityID string,
 	groupID string,
-) (entityGroup EntityGroupInterface, err error) {
+) (entityGroup GroupEntityRelationInterface, err error) {
 	if entityType == "" {
 		return nil, errors.New("EntityGroupFindByEntityAndGroup entityType is empty")
 	}
@@ -182,7 +182,7 @@ func (store *store) EntityGroupFindByEntityAndGroup(
 	return nil, nil
 }
 
-func (store *store) EntityGroupFindByID(ctx context.Context, id string) (entityGroup EntityGroupInterface, err error) {
+func (store *store) EntityGroupFindByID(ctx context.Context, id string) (entityGroup GroupEntityRelationInterface, err error) {
 	if id == "" {
 		return nil, errors.New("entityGroup id is empty")
 	}
@@ -202,9 +202,9 @@ func (store *store) EntityGroupFindByID(ctx context.Context, id string) (entityG
 	return nil, nil
 }
 
-func (store *store) EntityGroupList(ctx context.Context, query EntityGroupQueryInterface) ([]EntityGroupInterface, error) {
+func (store *store) EntityGroupList(ctx context.Context, query EntityGroupQueryInterface) ([]GroupEntityRelationInterface, error) {
 	if query == nil {
-		return []EntityGroupInterface{}, errors.New("at entityGroup list > entityGroup query is nil")
+		return []GroupEntityRelationInterface{}, errors.New("at entityGroup list > entityGroup query is nil")
 	}
 
 	q, columns, err := store.entityGroupSelectQuery(query)
@@ -212,32 +212,32 @@ func (store *store) EntityGroupList(ctx context.Context, query EntityGroupQueryI
 	sqlStr, sqlParams, errSql := q.Prepared(true).Select(columns...).ToSQL()
 
 	if errSql != nil {
-		return []EntityGroupInterface{}, nil
+		return []GroupEntityRelationInterface{}, nil
 	}
 
 	store.logSql("select", sqlStr, sqlParams...)
 
 	if store.db == nil {
-		return []EntityGroupInterface{}, errors.New("entityGroupstore: database is nil")
+		return []GroupEntityRelationInterface{}, errors.New("entityGroupstore: database is nil")
 	}
 
 	modelMaps, err := database.SelectToMapString(store.toQuerableContext(ctx), sqlStr, sqlParams...)
 
 	if err != nil {
-		return []EntityGroupInterface{}, err
+		return []GroupEntityRelationInterface{}, err
 	}
 
-	list := []EntityGroupInterface{}
+	list := []GroupEntityRelationInterface{}
 
 	lo.ForEach(modelMaps, func(modelMap map[string]string, index int) {
-		model := NewEntityGroupFromExistingData(modelMap)
+		model := NewGroupEntityRelationFromExistingData(modelMap)
 		list = append(list, model)
 	})
 
 	return list, nil
 }
 
-func (store *store) EntityGroupSoftDelete(ctx context.Context, entityGroup EntityGroupInterface) error {
+func (store *store) EntityGroupSoftDelete(ctx context.Context, entityGroup GroupEntityRelationInterface) error {
 	if entityGroup == nil {
 		return errors.New("at entityGroup soft delete > entityGroup is nil")
 	}
@@ -257,7 +257,7 @@ func (store *store) EntityGroupSoftDeleteByID(ctx context.Context, id string) er
 	return store.EntityGroupSoftDelete(ctx, entityGroup)
 }
 
-func (store *store) EntityGroupUpdate(ctx context.Context, entityGroup EntityGroupInterface) error {
+func (store *store) EntityGroupUpdate(ctx context.Context, entityGroup GroupEntityRelationInterface) error {
 	if entityGroup == nil {
 		return errors.New("at entityGroup update > entityGroup is nil")
 	}
@@ -273,7 +273,7 @@ func (store *store) EntityGroupUpdate(ctx context.Context, entityGroup EntityGro
 	}
 
 	sqlStr, params, errSql := goqu.Dialect(store.dbDriverName).
-		Update(store.entityGroupTableName).
+		Update(store.groupEntityRelationTableName).
 		Prepared(true).
 		Set(dataChanged).
 		Where(goqu.C(COLUMN_ID).Eq(entityGroup.ID())).
@@ -305,7 +305,7 @@ func (store *store) entityGroupSelectQuery(options EntityGroupQueryInterface) (s
 		return nil, nil, err
 	}
 
-	q := goqu.Dialect(store.dbDriverName).From(store.entityGroupTableName)
+	q := goqu.Dialect(store.dbDriverName).From(store.groupEntityRelationTableName)
 
 	if options.HasEntityID() {
 		q = q.Where(goqu.C(COLUMN_ENTITY_ID).Eq(options.EntityID()))

@@ -40,12 +40,12 @@ func initStore(filepath string) (StoreInterface, error) {
 	}
 
 	store, err := NewStore(NewStoreOptions{
-		DB:                   db,
-		GroupTableName:       "groups_group_table",
-		EntityGroupTableName: "groups_entity_group_table",
-		AutomigrateEnabled:   true,
-		DebugEnabled:         true,
-		SqlLogger:            slog.New(slog.NewTextHandler(os.Stdout, nil)),
+		DB:                           db,
+		GroupTableName:               "groups_group_table",
+		GroupEntityRelationTableName: "groups_group_entity_relation_table",
+		AutomigrateEnabled:           true,
+		DebugEnabled:                 true,
+		SqlLogger:                    slog.New(slog.NewTextHandler(os.Stdout, nil)),
 	})
 
 	if err != nil {

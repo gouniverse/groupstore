@@ -57,10 +57,10 @@ func (st *store) sqlGroupTableCreate() string {
 	return sql
 }
 
-// sqlEntityGroupTableCreate returns a SQL string for creating the  entity to group relation table
-func (st *store) sqlEntityGroupTableCreate() string {
+// sqlGroupEntityRelationTableCreate returns a SQL string for creating the  entity to group relation table
+func (st *store) sqlGroupEntityRelationTableCreate() string {
 	sql := sb.NewBuilder(sb.DatabaseDriverName(st.db)).
-		Table(st.entityGroupTableName).
+		Table(st.groupEntityRelationTableName).
 		Column(sb.Column{
 			Name:       COLUMN_ID,
 			Type:       sb.COLUMN_TYPE_STRING,

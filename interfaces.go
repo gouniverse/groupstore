@@ -55,31 +55,31 @@ type StoreInterface interface {
 	EntityGroupCount(ctx context.Context, options EntityGroupQueryInterface) (int64, error)
 
 	// EntityGroupCreate creates a new group entity mapping
-	EntityGroupCreate(ctx context.Context, entityGroup EntityGroupInterface) error
+	EntityGroupCreate(ctx context.Context, entityGroup GroupEntityRelationInterface) error
 
 	// EntityGroupDelete deletes a group entity mapping
-	EntityGroupDelete(ctx context.Context, entityGroup EntityGroupInterface) error
+	EntityGroupDelete(ctx context.Context, entityGroup GroupEntityRelationInterface) error
 
 	// EntityGroupDeleteByID deletes a group entity mapping by its ID
 	EntityGroupDeleteByID(ctx context.Context, id string) error
 
 	// EntityGroupFindByEntityAndGroup returns a group entity mapping by its entity type, entity ID and group ID
-	EntityGroupFindByEntityAndGroup(ctx context.Context, entityType string, entityID string, groupID string) (EntityGroupInterface, error)
+	EntityGroupFindByEntityAndGroup(ctx context.Context, entityType string, entityID string, groupID string) (GroupEntityRelationInterface, error)
 
 	// EntityGroupFindByID returns a group entity mapping by its ID
-	EntityGroupFindByID(ctx context.Context, id string) (EntityGroupInterface, error)
+	EntityGroupFindByID(ctx context.Context, id string) (GroupEntityRelationInterface, error)
 
 	// EntityGroupList returns a list of group entity mappings based on the given query options
-	EntityGroupList(ctx context.Context, query EntityGroupQueryInterface) ([]EntityGroupInterface, error)
+	EntityGroupList(ctx context.Context, query EntityGroupQueryInterface) ([]GroupEntityRelationInterface, error)
 
 	// EntityGroupSoftDelete soft deletes a group entity mapping
-	EntityGroupSoftDelete(ctx context.Context, entityGroup EntityGroupInterface) error
+	EntityGroupSoftDelete(ctx context.Context, entityGroup GroupEntityRelationInterface) error
 
 	// EntityGroupSoftDeleteByID soft deletes a group entity mapping by its ID
 	EntityGroupSoftDeleteByID(ctx context.Context, id string) error
 
 	// EntityGroupUpdate updates a group entity mapping
-	EntityGroupUpdate(ctx context.Context, entityGroup EntityGroupInterface) error
+	EntityGroupUpdate(ctx context.Context, entityGroup GroupEntityRelationInterface) error
 }
 
 type GroupInterface interface {
@@ -98,7 +98,7 @@ type GroupInterface interface {
 	// setters and getters
 
 	CreatedAt() string
-	CreatedAtCarbon() carbon.Carbon
+	CreatedAtCarbon() *carbon.Carbon
 	SetCreatedAt(createdAt string) GroupInterface
 
 	Handle() string
@@ -119,18 +119,18 @@ type GroupInterface interface {
 	SetStatus(status string) GroupInterface
 
 	SoftDeletedAt() string
-	SoftDeletedAtCarbon() carbon.Carbon
+	SoftDeletedAtCarbon() *carbon.Carbon
 	SetSoftDeletedAt(softDeletedAt string) GroupInterface
 
 	Title() string
 	SetTitle(title string) GroupInterface
 
 	UpdatedAt() string
-	UpdatedAtCarbon() carbon.Carbon
+	UpdatedAtCarbon() *carbon.Carbon
 	SetUpdatedAt(updatedAt string) GroupInterface
 }
 
-type EntityGroupInterface interface {
+type GroupEntityRelationInterface interface {
 	// from dataobject
 
 	Data() map[string]string
@@ -144,20 +144,20 @@ type EntityGroupInterface interface {
 	// setters and getters
 
 	CreatedAt() string
-	CreatedAtCarbon() carbon.Carbon
-	SetCreatedAt(createdAt string) EntityGroupInterface
+	CreatedAtCarbon() *carbon.Carbon
+	SetCreatedAt(createdAt string) GroupEntityRelationInterface
 
 	EntityType() string
-	SetEntityType(entityType string) EntityGroupInterface
+	SetEntityType(entityType string) GroupEntityRelationInterface
 
 	EntityID() string
-	SetEntityID(entityID string) EntityGroupInterface
+	SetEntityID(entityID string) GroupEntityRelationInterface
 
 	ID() string
-	SetID(id string) EntityGroupInterface
+	SetID(id string) GroupEntityRelationInterface
 
 	Memo() string
-	SetMemo(memo string) EntityGroupInterface
+	SetMemo(memo string) GroupEntityRelationInterface
 
 	Meta(name string) string
 	SetMeta(name string, value string) error
@@ -165,15 +165,15 @@ type EntityGroupInterface interface {
 	SetMetas(metas map[string]string) error
 
 	GroupID() string
-	SetGroupID(groupID string) EntityGroupInterface
+	SetGroupID(groupID string) GroupEntityRelationInterface
 
 	SoftDeletedAt() string
-	SoftDeletedAtCarbon() carbon.Carbon
-	SetSoftDeletedAt(softDeletedAt string) EntityGroupInterface
+	SoftDeletedAtCarbon() *carbon.Carbon
+	SetSoftDeletedAt(softDeletedAt string) GroupEntityRelationInterface
 
 	UpdatedAt() string
-	UpdatedAtCarbon() carbon.Carbon
-	SetUpdatedAt(updatedAt string) EntityGroupInterface
+	UpdatedAtCarbon() *carbon.Carbon
+	SetUpdatedAt(updatedAt string) GroupEntityRelationInterface
 }
 
 type UserInterface interface {
@@ -207,7 +207,7 @@ type UserInterface interface {
 	SetCountry(country string) UserInterface
 
 	CreatedAt() string
-	CreatedAtCarbon() carbon.Carbon
+	CreatedAtCarbon() *carbon.Carbon
 	SetCreatedAt(createdAt string) UserInterface
 
 	Email() string
@@ -247,7 +247,7 @@ type UserInterface interface {
 	SetGroup(group string) UserInterface
 
 	SoftDeletedAt() string
-	SoftDeletedAtCarbon() carbon.Carbon
+	SoftDeletedAtCarbon() *carbon.Carbon
 	SetSoftDeletedAt(deletedAt string) UserInterface
 
 	Timezone() string
@@ -259,6 +259,6 @@ type UserInterface interface {
 	PasswordCompare(password string) bool
 
 	UpdatedAt() string
-	UpdatedAtCarbon() carbon.Carbon
+	UpdatedAtCarbon() *carbon.Carbon
 	SetUpdatedAt(updatedAt string) UserInterface
 }

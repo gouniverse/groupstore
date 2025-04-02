@@ -11,16 +11,16 @@ import (
 
 // == CLASS ===================================================================
 
-type entityGroup struct {
+type groupEntityRelation struct {
 	dataobject.DataObject
 }
 
-var _ EntityGroupInterface = (*entityGroup)(nil)
+var _ GroupEntityRelationInterface = (*groupEntityRelation)(nil)
 
 // == CONSTRUCTORS ============================================================
 
-func NewEntityGroup() EntityGroupInterface {
-	o := (&entityGroup{}).
+func NewGroupEntityRelation() GroupEntityRelationInterface {
+	o := (&groupEntityRelation{}).
 		SetID(uid.HumanUid()).
 		SetMemo("").
 		SetCreatedAt(carbon.Now(carbon.UTC).ToDateTimeString(carbon.UTC)).
@@ -36,70 +36,70 @@ func NewEntityGroup() EntityGroupInterface {
 	return o
 }
 
-func NewEntityGroupFromExistingData(data map[string]string) EntityGroupInterface {
-	o := &entityGroup{}
+func NewGroupEntityRelationFromExistingData(data map[string]string) GroupEntityRelationInterface {
+	o := &groupEntityRelation{}
 	o.Hydrate(data)
 	return o
 }
 
 // == METHODS =================================================================
 
-func (o *entityGroup) IsSoftDeleted() bool {
+func (o *groupEntityRelation) IsSoftDeleted() bool {
 	return o.SoftDeletedAtCarbon().Compare("<", carbon.Now(carbon.UTC))
 }
 
 // == SETTERS AND GETTERS =====================================================
 
-func (o *entityGroup) CreatedAt() string {
+func (o *groupEntityRelation) CreatedAt() string {
 	return o.Get(COLUMN_CREATED_AT)
 }
 
-func (o *entityGroup) CreatedAtCarbon() carbon.Carbon {
+func (o *groupEntityRelation) CreatedAtCarbon() *carbon.Carbon {
 	return carbon.Parse(o.CreatedAt(), carbon.UTC)
 }
 
-func (o *entityGroup) SetCreatedAt(createdAt string) EntityGroupInterface {
+func (o *groupEntityRelation) SetCreatedAt(createdAt string) GroupEntityRelationInterface {
 	o.Set(COLUMN_CREATED_AT, createdAt)
 	return o
 }
 
-func (o *entityGroup) EntityType() string {
+func (o *groupEntityRelation) EntityType() string {
 	return o.Get(COLUMN_ENTITY_TYPE)
 }
 
-func (o *entityGroup) SetEntityType(entityType string) EntityGroupInterface {
+func (o *groupEntityRelation) SetEntityType(entityType string) GroupEntityRelationInterface {
 	o.Set(COLUMN_ENTITY_TYPE, entityType)
 	return o
 }
 
-func (o *entityGroup) EntityID() string {
+func (o *groupEntityRelation) EntityID() string {
 	return o.Get(COLUMN_ENTITY_ID)
 }
 
-func (o *entityGroup) SetEntityID(entityID string) EntityGroupInterface {
+func (o *groupEntityRelation) SetEntityID(entityID string) GroupEntityRelationInterface {
 	o.Set(COLUMN_ENTITY_ID, entityID)
 	return o
 }
 
-func (o *entityGroup) ID() string {
+func (o *groupEntityRelation) ID() string {
 	return o.Get(COLUMN_ID)
 }
 
-func (o *entityGroup) SetID(id string) EntityGroupInterface {
+func (o *groupEntityRelation) SetID(id string) GroupEntityRelationInterface {
 	o.Set(COLUMN_ID, id)
 	return o
 }
 
-func (o *entityGroup) Memo() string {
+func (o *groupEntityRelation) Memo() string {
 	return o.Get(COLUMN_MEMO)
 }
 
-func (o *entityGroup) SetMemo(memo string) EntityGroupInterface {
+func (o *groupEntityRelation) SetMemo(memo string) GroupEntityRelationInterface {
 	o.Set(COLUMN_MEMO, memo)
 	return o
 }
 
-func (o *entityGroup) Metas() (map[string]string, error) {
+func (o *groupEntityRelation) Metas() (map[string]string, error) {
 	metasStr := o.Get(COLUMN_METAS)
 
 	if metasStr == "" {
@@ -114,7 +114,7 @@ func (o *entityGroup) Metas() (map[string]string, error) {
 	return maputils.MapStringAnyToMapStringString(metasJson.(map[string]any)), nil
 }
 
-func (o *entityGroup) Meta(name string) string {
+func (o *groupEntityRelation) Meta(name string) string {
 	metas, err := o.Metas()
 
 	if err != nil {
@@ -128,13 +128,13 @@ func (o *entityGroup) Meta(name string) string {
 	return ""
 }
 
-func (o *entityGroup) SetMeta(name, value string) error {
+func (o *groupEntityRelation) SetMeta(name, value string) error {
 	return o.UpsertMetas(map[string]string{name: value})
 }
 
 // SetMetas stores metas as json string
 // Warning: it overwrites any existing metas
-func (o *entityGroup) SetMetas(metas map[string]string) error {
+func (o *groupEntityRelation) SetMetas(metas map[string]string) error {
 	mapString, err := utils.ToJSON(metas)
 	if err != nil {
 		return err
@@ -143,7 +143,7 @@ func (o *entityGroup) SetMetas(metas map[string]string) error {
 	return nil
 }
 
-func (o *entityGroup) UpsertMetas(metas map[string]string) error {
+func (o *groupEntityRelation) UpsertMetas(metas map[string]string) error {
 	currentMetas, err := o.Metas()
 
 	if err != nil {
@@ -157,37 +157,37 @@ func (o *entityGroup) UpsertMetas(metas map[string]string) error {
 	return o.SetMetas(currentMetas)
 }
 
-func (o *entityGroup) SoftDeletedAt() string {
+func (o *groupEntityRelation) SoftDeletedAt() string {
 	return o.Get(COLUMN_SOFT_DELETED_AT)
 }
 
-func (o *entityGroup) SoftDeletedAtCarbon() carbon.Carbon {
-	return carbon.NewCarbon().Parse(o.SoftDeletedAt(), carbon.UTC)
+func (o *groupEntityRelation) SoftDeletedAtCarbon() *carbon.Carbon {
+	return carbon.Parse(o.SoftDeletedAt(), carbon.UTC)
 }
 
-func (o *entityGroup) SetSoftDeletedAt(deletedAt string) EntityGroupInterface {
+func (o *groupEntityRelation) SetSoftDeletedAt(deletedAt string) GroupEntityRelationInterface {
 	o.Set(COLUMN_SOFT_DELETED_AT, deletedAt)
 	return o
 }
 
-func (o *entityGroup) GroupID() string {
+func (o *groupEntityRelation) GroupID() string {
 	return o.Get(COLUMN_GROUP_ID)
 }
 
-func (o *entityGroup) SetGroupID(roleID string) EntityGroupInterface {
+func (o *groupEntityRelation) SetGroupID(roleID string) GroupEntityRelationInterface {
 	o.Set(COLUMN_GROUP_ID, roleID)
 	return o
 }
 
-func (o *entityGroup) UpdatedAt() string {
+func (o *groupEntityRelation) UpdatedAt() string {
 	return o.Get(COLUMN_UPDATED_AT)
 }
 
-func (o *entityGroup) UpdatedAtCarbon() carbon.Carbon {
-	return carbon.NewCarbon().Parse(o.Get(COLUMN_UPDATED_AT), carbon.UTC)
+func (o *groupEntityRelation) UpdatedAtCarbon() *carbon.Carbon {
+	return carbon.Parse(o.Get(COLUMN_UPDATED_AT), carbon.UTC)
 }
 
-func (o *entityGroup) SetUpdatedAt(updatedAt string) EntityGroupInterface {
+func (o *groupEntityRelation) SetUpdatedAt(updatedAt string) GroupEntityRelationInterface {
 	o.Set(COLUMN_UPDATED_AT, updatedAt)
 	return o
 }

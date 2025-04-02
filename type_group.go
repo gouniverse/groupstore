@@ -63,7 +63,7 @@ func (o *group) CreatedAt() string {
 	return o.Get(COLUMN_CREATED_AT)
 }
 
-func (o *group) CreatedAtCarbon() carbon.Carbon {
+func (o *group) CreatedAtCarbon() *carbon.Carbon {
 	return carbon.Parse(o.CreatedAt(), carbon.UTC)
 }
 
@@ -161,8 +161,8 @@ func (o *group) SoftDeletedAt() string {
 	return o.Get(COLUMN_SOFT_DELETED_AT)
 }
 
-func (o *group) SoftDeletedAtCarbon() carbon.Carbon {
-	return carbon.NewCarbon().Parse(o.SoftDeletedAt(), carbon.UTC)
+func (o *group) SoftDeletedAtCarbon() *carbon.Carbon {
+	return carbon.Parse(o.SoftDeletedAt(), carbon.UTC)
 }
 
 func (o *group) SetSoftDeletedAt(deletedAt string) GroupInterface {
@@ -192,8 +192,8 @@ func (o *group) UpdatedAt() string {
 	return o.Get(COLUMN_UPDATED_AT)
 }
 
-func (o *group) UpdatedAtCarbon() carbon.Carbon {
-	return carbon.NewCarbon().Parse(o.Get(COLUMN_UPDATED_AT), carbon.UTC)
+func (o *group) UpdatedAtCarbon() *carbon.Carbon {
+	return carbon.Parse(o.Get(COLUMN_UPDATED_AT), carbon.UTC)
 }
 
 func (o *group) SetUpdatedAt(updatedAt string) GroupInterface {
