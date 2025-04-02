@@ -9,7 +9,7 @@ import (
 	"github.com/gouniverse/sb"
 )
 
-func TestStoreEntityGroupCount(t *testing.T) {
+func TestStoreRelationCount(t *testing.T) {
 	store, err := initStore(":memory:")
 
 	if err != nil {
@@ -22,7 +22,7 @@ func TestStoreEntityGroupCount(t *testing.T) {
 		}
 	}()
 
-	count, err := store.EntityGroupCount(context.Background(), NewEntityGroupQuery())
+	count, err := store.RelationCount(context.Background(), NewRelationQuery())
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -32,18 +32,18 @@ func TestStoreEntityGroupCount(t *testing.T) {
 		t.Fatal("unexpected count:", count)
 	}
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	count, err = store.EntityGroupCount(context.Background(), NewEntityGroupQuery())
+	count, err = store.RelationCount(context.Background(), NewRelationQuery())
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -53,18 +53,18 @@ func TestStoreEntityGroupCount(t *testing.T) {
 		t.Fatal("unexpected count:", count)
 	}
 
-	entityGroup2 := NewGroupEntityRelation().
+	entityGroup2 := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_02").
 		SetGroupID("PERMISSION_02")
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup2)
+	err = store.RelationCreate(context.Background(), entityGroup2)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	count, err = store.EntityGroupCount(context.Background(), NewEntityGroupQuery())
+	count, err = store.RelationCount(context.Background(), NewRelationQuery())
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -88,19 +88,19 @@ func TestStoreEntityGroupCreate(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 }
 
-func TestStoreEntityGroupCreate_Duplicate(t *testing.T) {
+func TestStoreRelationCreate_Duplicate(t *testing.T) {
 	store, err := initStore(":memory:")
 
 	if err != nil {
@@ -113,18 +113,18 @@ func TestStoreEntityGroupCreate_Duplicate(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 
 	if err == nil {
 		t.Fatal("must return error as duplicated entity to group relationship")
@@ -144,24 +144,24 @@ func TestStoreEntityGroupDelete(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	err = store.EntityGroupDelete(context.Background(), entityGroup)
+	err = store.RelationDelete(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	entityGroupFound, err := store.EntityGroupFindByID(context.Background(), entityGroup.ID())
+	entityGroupFound, err := store.RelationFindByID(context.Background(), entityGroup.ID())
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -171,7 +171,7 @@ func TestStoreEntityGroupDelete(t *testing.T) {
 		t.Fatal("EntityGroup MUST be nil")
 	}
 
-	entityGroupFindWithDeleted, err := store.EntityGroupList(context.Background(), NewEntityGroupQuery().
+	entityGroupFindWithDeleted, err := store.RelationList(context.Background(), NewRelationQuery().
 		SetID(entityGroup.ID()).
 		SetSoftDeletedIncluded(true))
 
@@ -197,24 +197,24 @@ func TestStoreEntityGroupDeleteByID(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	err = store.EntityGroupDeleteByID(context.Background(), entityGroup.ID())
+	err = store.RelationDeleteByID(context.Background(), entityGroup.ID())
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	entityGroupFound, err := store.EntityGroupFindByID(context.Background(), entityGroup.ID())
+	entityGroupFound, err := store.RelationFindByID(context.Background(), entityGroup.ID())
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -224,7 +224,7 @@ func TestStoreEntityGroupDeleteByID(t *testing.T) {
 		t.Fatal("EntityGroup MUST be nil")
 	}
 
-	entityGroupFindWithDeleted, err := store.EntityGroupList(context.Background(), NewEntityGroupQuery().
+	entityGroupFindWithDeleted, err := store.RelationList(context.Background(), NewRelationQuery().
 		SetID(entityGroup.ID()).
 		SetSoftDeletedIncluded(true))
 
@@ -250,7 +250,7 @@ func TestStoreEntityGroupFindByEntityAndGroup(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -265,12 +265,12 @@ func TestStoreEntityGroupFindByEntityAndGroup(t *testing.T) {
 		t.Fatal("unexpected error:", err)
 	}
 
-	err = store.EntityGroupCreate(database.Context(context.Background(), store.DB()), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 	if err != nil {
 		t.Error("unexpected error:", err)
 	}
 
-	entityGroupFound, errFind := store.EntityGroupFindByEntityAndGroup(database.Context(context.Background(), store.DB()), entityGroup.EntityType(), entityGroup.EntityID(), entityGroup.GroupID())
+	entityGroupFound, errFind := store.RelationFindByEntityAndGroup(context.Background(), entityGroup.EntityType(), entityGroup.EntityID(), entityGroup.GroupID())
 
 	if errFind != nil {
 		t.Fatal("unexpected error:", errFind)
@@ -322,7 +322,7 @@ func TestStoreEntityGroupFindByID(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
@@ -338,12 +338,12 @@ func TestStoreEntityGroupFindByID(t *testing.T) {
 	}
 
 	ctx := database.Context(context.Background(), store.DB())
-	err = store.EntityGroupCreate(ctx, entityGroup)
+	err = store.RelationCreate(ctx, entityGroup)
 	if err != nil {
 		t.Error("unexpected error:", err)
 	}
 
-	entityGroupFound, errFind := store.EntityGroupFindByID(ctx, entityGroup.ID())
+	entityGroupFound, errFind := store.RelationFindByID(ctx, entityGroup.ID())
 
 	if errFind != nil {
 		t.Fatal("unexpected error:", errFind)
@@ -395,29 +395,29 @@ func TestStoreEntityGroupList(t *testing.T) {
 		}
 	}()
 
-	entityGroup1 := NewGroupEntityRelation().
+	entityGroup1 := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	entityGroup2 := NewGroupEntityRelation().
+	entityGroup2 := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_02").
 		SetGroupID("PERMISSION_02")
 
-	entityGroups := []GroupEntityRelationInterface{
+	entityGroups := []RelationInterface{
 		entityGroup1,
 		entityGroup2,
 	}
 
 	for _, entityGroup := range entityGroups {
-		err = store.EntityGroupCreate(context.Background(), entityGroup)
+		err = store.RelationCreate(context.Background(), entityGroup)
 		if err != nil {
 			t.Error("unexpected error:", err)
 		}
 	}
 
-	list1, err := store.EntityGroupList(context.Background(), NewEntityGroupQuery().SetGroupID("PERMISSION_01"))
+	list1, err := store.RelationList(context.Background(), NewRelationQuery().SetGroupID("PERMISSION_01"))
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -427,7 +427,7 @@ func TestStoreEntityGroupList(t *testing.T) {
 		t.Fatal("unexpected list length:", len(list1))
 	}
 
-	list2, err := store.EntityGroupList(context.Background(), NewEntityGroupQuery().SetEntityType("USER").SetEntityID("USER_02"))
+	list2, err := store.RelationList(context.Background(), NewRelationQuery().SetEntityType("USER").SetEntityID("USER_02"))
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -451,18 +451,18 @@ func TestStoreEntityGroupSoftDelete(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	err = store.EntityGroupSoftDelete(context.Background(), entityGroup)
+	err = store.RelationSoftDelete(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -472,7 +472,7 @@ func TestStoreEntityGroupSoftDelete(t *testing.T) {
 		t.Fatal("EntityGroup MUST be soft deleted")
 	}
 
-	entityGroupFound, errFind := store.EntityGroupFindByID(context.Background(), entityGroup.ID())
+	entityGroupFound, errFind := store.RelationFindByID(context.Background(), entityGroup.ID())
 
 	if errFind != nil {
 		t.Fatal("unexpected error:", errFind)
@@ -482,7 +482,7 @@ func TestStoreEntityGroupSoftDelete(t *testing.T) {
 		t.Fatal("EntityGroup MUST be soft deleted, so MUST be nil")
 	}
 
-	entityGroupFindWithDeleted, err := store.EntityGroupList(context.Background(), NewEntityGroupQuery().
+	entityGroupFindWithDeleted, err := store.RelationList(context.Background(), NewRelationQuery().
 		SetSoftDeletedIncluded(true).
 		SetID(entityGroup.ID()).
 		SetLimit(1))
@@ -517,18 +517,18 @@ func TestStoreEntityGroupSoftDeleteByID(t *testing.T) {
 		}
 	}()
 
-	entityGroup := NewGroupEntityRelation().
+	entityGroup := NewRelation().
 		SetEntityType("USER").
 		SetEntityID("USER_01").
 		SetGroupID("PERMISSION_01")
 
-	err = store.EntityGroupCreate(context.Background(), entityGroup)
+	err = store.RelationCreate(context.Background(), entityGroup)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
 	}
 
-	err = store.EntityGroupSoftDeleteByID(context.Background(), entityGroup.ID())
+	err = store.RelationSoftDeleteByID(context.Background(), entityGroup.ID())
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)
@@ -538,7 +538,7 @@ func TestStoreEntityGroupSoftDeleteByID(t *testing.T) {
 		t.Fatal("EntityGroup MUST NOT be soft deleted, as it was soft deleted by ID")
 	}
 
-	entityGroupFound, errFind := store.EntityGroupFindByID(context.Background(), entityGroup.ID())
+	entityGroupFound, errFind := store.RelationFindByID(context.Background(), entityGroup.ID())
 
 	if errFind != nil {
 		t.Fatal("unexpected error:", errFind)
@@ -547,12 +547,12 @@ func TestStoreEntityGroupSoftDeleteByID(t *testing.T) {
 	if entityGroupFound != nil {
 		t.Fatal("EntityGroup MUST be nil")
 	}
-	query := NewEntityGroupQuery().
+	query := NewRelationQuery().
 		SetSoftDeletedIncluded(true).
 		SetID(entityGroup.ID()).
 		SetLimit(1)
 
-	entityGroupFindWithDeleted, err := store.EntityGroupList(context.Background(), query)
+	entityGroupFindWithDeleted, err := store.RelationList(context.Background(), query)
 
 	if err != nil {
 		t.Fatal("unexpected error:", err)

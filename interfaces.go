@@ -49,37 +49,37 @@ type StoreInterface interface {
 	// GroupUpdate updates a group
 	GroupUpdate(ctx context.Context, group GroupInterface) error
 
-	// == EntityGroup Methods =================================================//
+	// == Relation Methods ====================================================//
 
-	// EntityGroupCount returns the number of group entities mappings based on the given query options
-	EntityGroupCount(ctx context.Context, options EntityGroupQueryInterface) (int64, error)
+	// RelationCount returns the number of group entities mappings based on the given query options
+	RelationCount(ctx context.Context, options RelationQueryInterface) (int64, error)
 
-	// EntityGroupCreate creates a new group entity mapping
-	EntityGroupCreate(ctx context.Context, entityGroup GroupEntityRelationInterface) error
+	// RelationCreate creates a new group entity mapping
+	RelationCreate(ctx context.Context, relation RelationInterface) error
 
-	// EntityGroupDelete deletes a group entity mapping
-	EntityGroupDelete(ctx context.Context, entityGroup GroupEntityRelationInterface) error
+	// RelationDelete deletes a group entity mapping
+	RelationDelete(ctx context.Context, relation RelationInterface) error
 
-	// EntityGroupDeleteByID deletes a group entity mapping by its ID
-	EntityGroupDeleteByID(ctx context.Context, id string) error
+	// RelationDeleteByID deletes a group entity mapping by its ID
+	RelationDeleteByID(ctx context.Context, id string) error
 
-	// EntityGroupFindByEntityAndGroup returns a group entity mapping by its entity type, entity ID and group ID
-	EntityGroupFindByEntityAndGroup(ctx context.Context, entityType string, entityID string, groupID string) (GroupEntityRelationInterface, error)
+	// RelationFindByEntityAndGroup returns a group entity mapping by its entity type, entity ID and group ID
+	RelationFindByEntityAndGroup(ctx context.Context, entityType string, entityID string, groupID string) (RelationInterface, error)
 
-	// EntityGroupFindByID returns a group entity mapping by its ID
-	EntityGroupFindByID(ctx context.Context, id string) (GroupEntityRelationInterface, error)
+	// RelationFindByID returns a group entity mapping by its ID
+	RelationFindByID(ctx context.Context, id string) (RelationInterface, error)
 
-	// EntityGroupList returns a list of group entity mappings based on the given query options
-	EntityGroupList(ctx context.Context, query EntityGroupQueryInterface) ([]GroupEntityRelationInterface, error)
+	// RelationList returns a list of group entity mappings based on the given query options
+	RelationList(ctx context.Context, query RelationQueryInterface) ([]RelationInterface, error)
 
-	// EntityGroupSoftDelete soft deletes a group entity mapping
-	EntityGroupSoftDelete(ctx context.Context, entityGroup GroupEntityRelationInterface) error
+	// RelationSoftDelete soft deletes a group entity mapping
+	RelationSoftDelete(ctx context.Context, relation RelationInterface) error
 
-	// EntityGroupSoftDeleteByID soft deletes a group entity mapping by its ID
-	EntityGroupSoftDeleteByID(ctx context.Context, id string) error
+	// RelationSoftDeleteByID soft deletes a group entity mapping by its ID
+	RelationSoftDeleteByID(ctx context.Context, id string) error
 
-	// EntityGroupUpdate updates a group entity mapping
-	EntityGroupUpdate(ctx context.Context, entityGroup GroupEntityRelationInterface) error
+	// RelationUpdate updates a group entity mapping
+	RelationUpdate(ctx context.Context, relation RelationInterface) error
 }
 
 type GroupInterface interface {
@@ -130,7 +130,7 @@ type GroupInterface interface {
 	SetUpdatedAt(updatedAt string) GroupInterface
 }
 
-type GroupEntityRelationInterface interface {
+type RelationInterface interface {
 	// from dataobject
 
 	Data() map[string]string
@@ -145,19 +145,19 @@ type GroupEntityRelationInterface interface {
 
 	CreatedAt() string
 	CreatedAtCarbon() *carbon.Carbon
-	SetCreatedAt(createdAt string) GroupEntityRelationInterface
+	SetCreatedAt(createdAt string) RelationInterface
 
 	EntityType() string
-	SetEntityType(entityType string) GroupEntityRelationInterface
+	SetEntityType(entityType string) RelationInterface
 
 	EntityID() string
-	SetEntityID(entityID string) GroupEntityRelationInterface
+	SetEntityID(entityID string) RelationInterface
 
 	ID() string
-	SetID(id string) GroupEntityRelationInterface
+	SetID(id string) RelationInterface
 
 	Memo() string
-	SetMemo(memo string) GroupEntityRelationInterface
+	SetMemo(memo string) RelationInterface
 
 	Meta(name string) string
 	SetMeta(name string, value string) error
@@ -165,15 +165,15 @@ type GroupEntityRelationInterface interface {
 	SetMetas(metas map[string]string) error
 
 	GroupID() string
-	SetGroupID(groupID string) GroupEntityRelationInterface
+	SetGroupID(groupID string) RelationInterface
 
 	SoftDeletedAt() string
 	SoftDeletedAtCarbon() *carbon.Carbon
-	SetSoftDeletedAt(softDeletedAt string) GroupEntityRelationInterface
+	SetSoftDeletedAt(softDeletedAt string) RelationInterface
 
 	UpdatedAt() string
 	UpdatedAtCarbon() *carbon.Carbon
-	SetUpdatedAt(updatedAt string) GroupEntityRelationInterface
+	SetUpdatedAt(updatedAt string) RelationInterface
 }
 
 type UserInterface interface {

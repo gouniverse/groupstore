@@ -14,25 +14,11 @@ For commercial use, please use my [contact page](https://lesichkov.co.uk/contact
 
 ## Features
 
-- Clean architecture with separate packages for entities and stores
-- Real database connections using SQLite (in-memory for testing)
-- Type-safe entities and interfaces
-- Comprehensive test coverage
-- Transaction support
-- Flexible entity grouping capabilities
 - Generic group relationship management
-
-## Architecture
-
-The project is organized into several key components:
-
-- **Entities**: Data objects representing group-related data
-- **Stores**: Data access objects for database operations
-- **Interfaces**: Public interfaces for store access
 
 ## Usage
 
-GroupStore can be used to manage various types of group relationships, i.e:
+GroupStore can be used to manage group relationships, i.e:
 
 - User groups and permissions
 - Product categories and subcategories
@@ -88,19 +74,19 @@ if err != nil {
 }
 
 // Create a new user group relationship
-userGroupRelation := groupstore.NewGroupEntityRelation()
-userGroupRelation.SetGroupID(adminGroup.ID())      // ID of the group
-userGroupRelation.SetEntityType("user")           // Type of entity (user in this case)
-userGroupRelation.SetEntityID("123456")          // ID of the user
+userRelation := groupstore.NewRelation()
+userRelation.SetGroupID(adminGroup.ID())      // ID of the group
+userRelation.SetEntityType("user")           // Type of entity (user in this case)
+userRelation.SetEntityID("123456")          // ID of the user
 
 // Save the relationship
-err = store.GroupEntityRelationCreate(ctx, userGroupRelation)
+err = store.RelationCreate(ctx, userRelation)
 if err != nil {
     // handle error
 }
 
 // List all users in the group
-users, err := store.GroupEntityRelationList(ctx, groupstore.GroupEntityRelationQuery().GroupID(adminGroup.ID()))
+users, err := store.RelationList(ctx, groupstore.RelationQuery().GroupID(adminGroup.ID()))
 if err != nil {
     // handle error
 }

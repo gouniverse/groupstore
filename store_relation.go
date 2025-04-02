@@ -14,10 +14,10 @@ import (
 	"github.com/spf13/cast"
 )
 
-func (store *store) EntityGroupCount(ctx context.Context, options EntityGroupQueryInterface) (int64, error) {
+func (store *store) RelationCount(ctx context.Context, options RelationQueryInterface) (int64, error) {
 	options.SetCountOnly(true)
 
-	q, _, err := store.entityGroupSelectQuery(options)
+	q, _, err := store.relationSelectQuery(options)
 
 	sqlStr, params, errSql := q.Prepared(true).
 		Limit(1).
@@ -51,42 +51,42 @@ func (store *store) EntityGroupCount(ctx context.Context, options EntityGroupQue
 	return i, nil
 }
 
-func (store *store) EntityGroupCreate(ctx context.Context, entityGroup GroupEntityRelationInterface) error {
-	if entityGroup == nil {
-		return errors.New("groupstore > EntityGroupCreate. entityGroup is nil")
+func (store *store) RelationCreate(ctx context.Context, relation RelationInterface) error {
+	if relation == nil {
+		return errors.New("groupstore > RelationCreate. relation is nil")
 	}
 
-	if entityGroup.GroupID() == "" {
-		return errors.New("groupstore > EntityGroupCreate. entityGroup groupID is empty")
+	if relation.GroupID() == "" {
+		return errors.New("groupstore > RelationCreate. relation groupID is empty")
 	}
 
-	if entityGroup.EntityID() == "" {
-		return errors.New("groupstore > EntityGroupCreate. entityGroup entityID is empty")
+	if relation.EntityID() == "" {
+		return errors.New("groupstore > RelationCreate. relation entityID is empty")
 	}
 
-	if entityGroup.EntityType() == "" {
-		return errors.New("groupstore > EntityGroupCreate. entityGroup entityType is empty")
+	if relation.EntityType() == "" {
+		return errors.New("groupstore > RelationCreate. relation entityType is empty")
 	}
 
-	entityGroupExists, err := store.EntityGroupFindByEntityAndGroup(
+	relationExists, err := store.RelationFindByEntityAndGroup(
 		ctx,
-		entityGroup.EntityType(),
-		entityGroup.EntityID(),
-		entityGroup.GroupID(),
+		relation.EntityType(),
+		relation.EntityID(),
+		relation.GroupID(),
 	)
 
 	if err != nil {
 		return err
 	}
 
-	if entityGroupExists != nil {
-		return errors.New("groupstore > EntityGroupCreate. entityGroup with the same entityType-entityID-groupID combination already exists")
+	if relationExists != nil {
+		return errors.New("groupstore > RelationCreate. relation with the same entityType-entityID-groupID combination already exists")
 	}
 
-	entityGroup.SetCreatedAt(carbon.Now(carbon.UTC).ToDateTimeString(carbon.UTC))
-	entityGroup.SetUpdatedAt(carbon.Now(carbon.UTC).ToDateTimeString(carbon.UTC))
+	relation.SetCreatedAt(carbon.Now(carbon.UTC).ToDateTimeString(carbon.UTC))
+	relation.SetUpdatedAt(carbon.Now(carbon.UTC).ToDateTimeString(carbon.UTC))
 
-	data := entityGroup.Data()
+	data := relation.Data()
 
 	sqlStr, params, errSql := goqu.Dialect(store.dbDriverName).
 		Insert(store.groupEntityRelationTableName).
@@ -110,22 +110,22 @@ func (store *store) EntityGroupCreate(ctx context.Context, entityGroup GroupEnti
 		return err
 	}
 
-	entityGroup.MarkAsNotDirty()
+	relation.MarkAsNotDirty()
 
 	return nil
 }
 
-func (store *store) EntityGroupDelete(ctx context.Context, entityGroup GroupEntityRelationInterface) error {
-	if entityGroup == nil {
-		return errors.New("entityGroup is nil")
+func (store *store) RelationDelete(ctx context.Context, relation RelationInterface) error {
+	if relation == nil {
+		return errors.New("relation is nil")
 	}
 
-	return store.EntityGroupDeleteByID(ctx, entityGroup.ID())
+	return store.RelationDeleteByID(ctx, relation.ID())
 }
 
-func (store *store) EntityGroupDeleteByID(ctx context.Context, id string) error {
+func (store *store) RelationDeleteByID(ctx context.Context, id string) error {
 	if id == "" {
-		return errors.New("entityGroup id is empty")
+		return errors.New("relation id is empty")
 	}
 
 	sqlStr, params, errSql := goqu.Dialect(store.dbDriverName).
@@ -145,31 +145,31 @@ func (store *store) EntityGroupDeleteByID(ctx context.Context, id string) error 
 	return err
 }
 
-func (store *store) EntityGroupFindByEntityAndGroup(
+func (store *store) RelationFindByEntityAndGroup(
 	ctx context.Context,
 	entityType string,
 	entityID string,
 	groupID string,
-) (entityGroup GroupEntityRelationInterface, err error) {
+) (relation RelationInterface, err error) {
 	if entityType == "" {
-		return nil, errors.New("EntityGroupFindByEntityAndGroup entityType is empty")
+		return nil, errors.New("relation findBy entity and group > entityType is empty")
 	}
 
 	if entityID == "" {
-		return nil, errors.New("EntityGroupFindByEntityAndGroup entityID is empty")
+		return nil, errors.New("relation findBy entity and group > entityID is empty")
 	}
 
 	if groupID == "" {
-		return nil, errors.New("EntityGroupFindByEntityAndGroup groupID is empty")
+		return nil, errors.New("relation findBy entity and group > groupID is empty")
 	}
 
-	query := NewEntityGroupQuery().
+	query := NewRelationQuery().
 		SetEntityType(entityType).
 		SetEntityID(entityID).
 		SetGroupID(groupID).
 		SetLimit(1)
 
-	list, err := store.EntityGroupList(ctx, query)
+	list, err := store.RelationList(ctx, query)
 
 	if err != nil {
 		return nil, err
@@ -182,14 +182,14 @@ func (store *store) EntityGroupFindByEntityAndGroup(
 	return nil, nil
 }
 
-func (store *store) EntityGroupFindByID(ctx context.Context, id string) (entityGroup GroupEntityRelationInterface, err error) {
+func (store *store) RelationFindByID(ctx context.Context, id string) (relation RelationInterface, err error) {
 	if id == "" {
-		return nil, errors.New("entityGroup id is empty")
+		return nil, errors.New("relation id is empty")
 	}
 
-	query := NewEntityGroupQuery().SetID(id).SetLimit(1)
+	query := NewRelationQuery().SetID(id).SetLimit(1)
 
-	list, err := store.EntityGroupList(ctx, query)
+	list, err := store.RelationList(ctx, query)
 
 	if err != nil {
 		return nil, err
@@ -202,32 +202,32 @@ func (store *store) EntityGroupFindByID(ctx context.Context, id string) (entityG
 	return nil, nil
 }
 
-func (store *store) EntityGroupList(ctx context.Context, query EntityGroupQueryInterface) ([]GroupEntityRelationInterface, error) {
+func (store *store) RelationList(ctx context.Context, query RelationQueryInterface) ([]RelationInterface, error) {
 	if query == nil {
-		return []GroupEntityRelationInterface{}, errors.New("at entityGroup list > entityGroup query is nil")
+		return []RelationInterface{}, errors.New("at relation list > relation query is nil")
 	}
 
-	q, columns, err := store.entityGroupSelectQuery(query)
+	q, columns, err := store.relationSelectQuery(query)
 
 	sqlStr, sqlParams, errSql := q.Prepared(true).Select(columns...).ToSQL()
 
 	if errSql != nil {
-		return []GroupEntityRelationInterface{}, nil
+		return []RelationInterface{}, nil
 	}
 
 	store.logSql("select", sqlStr, sqlParams...)
 
 	if store.db == nil {
-		return []GroupEntityRelationInterface{}, errors.New("entityGroupstore: database is nil")
+		return []RelationInterface{}, errors.New("entityGroupstore: database is nil")
 	}
 
 	modelMaps, err := database.SelectToMapString(store.toQuerableContext(ctx), sqlStr, sqlParams...)
 
 	if err != nil {
-		return []GroupEntityRelationInterface{}, err
+		return []RelationInterface{}, err
 	}
 
-	list := []GroupEntityRelationInterface{}
+	list := []RelationInterface{}
 
 	lo.ForEach(modelMaps, func(modelMap map[string]string, index int) {
 		model := NewGroupEntityRelationFromExistingData(modelMap)
@@ -237,34 +237,34 @@ func (store *store) EntityGroupList(ctx context.Context, query EntityGroupQueryI
 	return list, nil
 }
 
-func (store *store) EntityGroupSoftDelete(ctx context.Context, entityGroup GroupEntityRelationInterface) error {
-	if entityGroup == nil {
-		return errors.New("at entityGroup soft delete > entityGroup is nil")
+func (store *store) RelationSoftDelete(ctx context.Context, relation RelationInterface) error {
+	if relation == nil {
+		return errors.New("at relation soft delete > relation is nil")
 	}
 
-	entityGroup.SetSoftDeletedAt(carbon.Now(carbon.UTC).ToDateTimeString(carbon.UTC))
+	relation.SetSoftDeletedAt(carbon.Now(carbon.UTC).ToDateTimeString(carbon.UTC))
 
-	return store.EntityGroupUpdate(ctx, entityGroup)
+	return store.RelationUpdate(ctx, relation)
 }
 
-func (store *store) EntityGroupSoftDeleteByID(ctx context.Context, id string) error {
-	entityGroup, err := store.EntityGroupFindByID(ctx, id)
+func (store *store) RelationSoftDeleteByID(ctx context.Context, id string) error {
+	relation, err := store.RelationFindByID(ctx, id)
 
 	if err != nil {
 		return err
 	}
 
-	return store.EntityGroupSoftDelete(ctx, entityGroup)
+	return store.RelationSoftDelete(ctx, relation)
 }
 
-func (store *store) EntityGroupUpdate(ctx context.Context, entityGroup GroupEntityRelationInterface) error {
-	if entityGroup == nil {
-		return errors.New("at entityGroup update > entityGroup is nil")
+func (store *store) RelationUpdate(ctx context.Context, relation RelationInterface) error {
+	if relation == nil {
+		return errors.New("at relation update > relation is nil")
 	}
 
-	entityGroup.SetUpdatedAt(carbon.Now(carbon.UTC).ToDateTimeString())
+	relation.SetUpdatedAt(carbon.Now(carbon.UTC).ToDateTimeString())
 
-	dataChanged := entityGroup.DataChanged()
+	dataChanged := relation.DataChanged()
 
 	delete(dataChanged, COLUMN_ID) // ID is not updateable
 
@@ -276,7 +276,7 @@ func (store *store) EntityGroupUpdate(ctx context.Context, entityGroup GroupEnti
 		Update(store.groupEntityRelationTableName).
 		Prepared(true).
 		Set(dataChanged).
-		Where(goqu.C(COLUMN_ID).Eq(entityGroup.ID())).
+		Where(goqu.C(COLUMN_ID).Eq(relation.ID())).
 		ToSQL()
 
 	if errSql != nil {
@@ -291,14 +291,14 @@ func (store *store) EntityGroupUpdate(ctx context.Context, entityGroup GroupEnti
 
 	_, err := database.Execute(store.toQuerableContext(ctx), sqlStr, params...)
 
-	entityGroup.MarkAsNotDirty()
+	relation.MarkAsNotDirty()
 
 	return err
 }
 
-func (store *store) entityGroupSelectQuery(options EntityGroupQueryInterface) (selectDataset *goqu.SelectDataset, columns []any, err error) {
+func (store *store) relationSelectQuery(options RelationQueryInterface) (selectDataset *goqu.SelectDataset, columns []any, err error) {
 	if options == nil {
-		return nil, nil, errors.New("entityGroup options is nil")
+		return nil, nil, errors.New("relation options is nil")
 	}
 
 	if err := options.Validate(); err != nil {

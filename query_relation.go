@@ -2,68 +2,68 @@ package groupstore
 
 import "errors"
 
-type EntityGroupQueryInterface interface {
+type RelationQueryInterface interface {
 	Validate() error
 
 	Columns() []string
-	SetColumns(columns []string) EntityGroupQueryInterface
+	SetColumns(columns []string) RelationQueryInterface
 
 	HasCountOnly() bool
 	IsCountOnly() bool
-	SetCountOnly(countOnly bool) EntityGroupQueryInterface
+	SetCountOnly(countOnly bool) RelationQueryInterface
 
 	HasCreatedAtGte() bool
 	CreatedAtGte() string
-	SetCreatedAtGte(createdAtGte string) EntityGroupQueryInterface
+	SetCreatedAtGte(createdAtGte string) RelationQueryInterface
 
 	HasCreatedAtLte() bool
 	CreatedAtLte() string
-	SetCreatedAtLte(createdAtLte string) EntityGroupQueryInterface
+	SetCreatedAtLte(createdAtLte string) RelationQueryInterface
 
 	HasEntityID() bool
 	EntityID() string
-	SetEntityID(entityID string) EntityGroupQueryInterface
+	SetEntityID(entityID string) RelationQueryInterface
 
 	HasEntityType() bool
 	EntityType() string
-	SetEntityType(entityType string) EntityGroupQueryInterface
+	SetEntityType(entityType string) RelationQueryInterface
 
 	HasID() bool
 	ID() string
-	SetID(id string) EntityGroupQueryInterface
+	SetID(id string) RelationQueryInterface
 
 	HasIDIn() bool
 	IDIn() []string
-	SetIDIn(idIn []string) EntityGroupQueryInterface
+	SetIDIn(idIn []string) RelationQueryInterface
 
 	HasLimit() bool
 	Limit() int
-	SetLimit(limit int) EntityGroupQueryInterface
+	SetLimit(limit int) RelationQueryInterface
 
 	HasOffset() bool
 	Offset() int
-	SetOffset(offset int) EntityGroupQueryInterface
+	SetOffset(offset int) RelationQueryInterface
 
 	HasOrderBy() bool
 	OrderBy() string
-	SetOrderBy(orderBy string) EntityGroupQueryInterface
+	SetOrderBy(orderBy string) RelationQueryInterface
 
 	HasGroupID() bool
 	GroupID() string
-	SetGroupID(groupID string) EntityGroupQueryInterface
+	SetGroupID(groupID string) RelationQueryInterface
 
 	HasSortDirection() bool
 	SortDirection() string
-	SetSortDirection(sortDirection string) EntityGroupQueryInterface
+	SetSortDirection(sortDirection string) RelationQueryInterface
 
 	HasSoftDeletedIncluded() bool
 	SoftDeletedIncluded() bool
-	SetSoftDeletedIncluded(softDeletedIncluded bool) EntityGroupQueryInterface
+	SetSoftDeletedIncluded(softDeletedIncluded bool) RelationQueryInterface
 
 	hasProperty(name string) bool
 }
 
-func NewEntityGroupQuery() EntityGroupQueryInterface {
+func NewRelationQuery() RelationQueryInterface {
 	return &groupEntityQueryImplementation{
 		properties: make(map[string]any),
 	}
@@ -125,7 +125,7 @@ func (c *groupEntityQueryImplementation) Columns() []string {
 	return c.properties["columns"].([]string)
 }
 
-func (c *groupEntityQueryImplementation) SetColumns(columns []string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetColumns(columns []string) RelationQueryInterface {
 	c.properties["columns"] = columns
 
 	return c
@@ -143,7 +143,7 @@ func (c *groupEntityQueryImplementation) IsCountOnly() bool {
 	return c.properties["count_only"].(bool)
 }
 
-func (c *groupEntityQueryImplementation) SetCountOnly(countOnly bool) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetCountOnly(countOnly bool) RelationQueryInterface {
 	c.properties["count_only"] = countOnly
 
 	return c
@@ -161,7 +161,7 @@ func (c *groupEntityQueryImplementation) CreatedAtGte() string {
 	return c.properties["created_at_gte"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetCreatedAtGte(createdAtGte string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetCreatedAtGte(createdAtGte string) RelationQueryInterface {
 	c.properties["created_at_gte"] = createdAtGte
 
 	return c
@@ -179,7 +179,7 @@ func (c *groupEntityQueryImplementation) CreatedAtLte() string {
 	return c.properties["created_at_lte"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetCreatedAtLte(createdAtLte string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetCreatedAtLte(createdAtLte string) RelationQueryInterface {
 	c.properties["created_at_lte"] = createdAtLte
 
 	return c
@@ -197,7 +197,7 @@ func (c *groupEntityQueryImplementation) EntityType() string {
 	return c.properties["entity_type"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetEntityType(entityType string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetEntityType(entityType string) RelationQueryInterface {
 	c.properties["entity_type"] = entityType
 
 	return c
@@ -215,7 +215,7 @@ func (c *groupEntityQueryImplementation) EntityID() string {
 	return c.properties["entity_id"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetEntityID(entityID string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetEntityID(entityID string) RelationQueryInterface {
 	c.properties["entity_id"] = entityID
 
 	return c
@@ -233,7 +233,7 @@ func (c *groupEntityQueryImplementation) ID() string {
 	return c.properties["id"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetID(id string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetID(id string) RelationQueryInterface {
 	c.properties["id"] = id
 
 	return c
@@ -251,7 +251,7 @@ func (c *groupEntityQueryImplementation) IDIn() []string {
 	return c.properties["id_in"].([]string)
 }
 
-func (c *groupEntityQueryImplementation) SetIDIn(idIn []string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetIDIn(idIn []string) RelationQueryInterface {
 	c.properties["id_in"] = idIn
 
 	return c
@@ -269,7 +269,7 @@ func (c *groupEntityQueryImplementation) Limit() int {
 	return c.properties["limit"].(int)
 }
 
-func (c *groupEntityQueryImplementation) SetLimit(limit int) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetLimit(limit int) RelationQueryInterface {
 	c.properties["limit"] = limit
 
 	return c
@@ -287,7 +287,7 @@ func (c *groupEntityQueryImplementation) Offset() int {
 	return c.properties["offset"].(int)
 }
 
-func (c *groupEntityQueryImplementation) SetOffset(offset int) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetOffset(offset int) RelationQueryInterface {
 	c.properties["offset"] = offset
 
 	return c
@@ -305,7 +305,7 @@ func (c *groupEntityQueryImplementation) OrderBy() string {
 	return c.properties["order_by"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetOrderBy(orderBy string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetOrderBy(orderBy string) RelationQueryInterface {
 	c.properties["order_by"] = orderBy
 
 	return c
@@ -323,7 +323,7 @@ func (c *groupEntityQueryImplementation) GroupID() string {
 	return c.properties["group_id"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetGroupID(groupID string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetGroupID(groupID string) RelationQueryInterface {
 	c.properties["group_id"] = groupID
 
 	return c
@@ -341,7 +341,7 @@ func (c *groupEntityQueryImplementation) SortDirection() string {
 	return c.properties["sort_direction"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetSortDirection(sortDirection string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetSortDirection(sortDirection string) RelationQueryInterface {
 	c.properties["sort_direction"] = sortDirection
 
 	return c
@@ -359,7 +359,7 @@ func (c *groupEntityQueryImplementation) SoftDeletedIncluded() bool {
 	return c.properties["soft_deleted_included"].(bool)
 }
 
-func (c *groupEntityQueryImplementation) SetSoftDeletedIncluded(softDeletedIncluded bool) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetSoftDeletedIncluded(softDeletedIncluded bool) RelationQueryInterface {
 	c.properties["soft_deleted_included"] = softDeletedIncluded
 
 	return c
@@ -377,7 +377,7 @@ func (c *groupEntityQueryImplementation) TitleLike() string {
 	return c.properties["title_like"].(string)
 }
 
-func (c *groupEntityQueryImplementation) SetTitleLike(titleLike string) EntityGroupQueryInterface {
+func (c *groupEntityQueryImplementation) SetTitleLike(titleLike string) RelationQueryInterface {
 	c.properties["title_like"] = titleLike
 
 	return c

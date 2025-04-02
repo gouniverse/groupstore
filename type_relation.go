@@ -11,16 +11,16 @@ import (
 
 // == CLASS ===================================================================
 
-type groupEntityRelation struct {
+type relation struct {
 	dataobject.DataObject
 }
 
-var _ GroupEntityRelationInterface = (*groupEntityRelation)(nil)
+var _ RelationInterface = (*relation)(nil)
 
 // == CONSTRUCTORS ============================================================
 
-func NewGroupEntityRelation() GroupEntityRelationInterface {
-	o := (&groupEntityRelation{}).
+func NewRelation() RelationInterface {
+	o := (&relation{}).
 		SetID(uid.HumanUid()).
 		SetMemo("").
 		SetCreatedAt(carbon.Now(carbon.UTC).ToDateTimeString(carbon.UTC)).
@@ -36,70 +36,70 @@ func NewGroupEntityRelation() GroupEntityRelationInterface {
 	return o
 }
 
-func NewGroupEntityRelationFromExistingData(data map[string]string) GroupEntityRelationInterface {
-	o := &groupEntityRelation{}
+func NewGroupEntityRelationFromExistingData(data map[string]string) RelationInterface {
+	o := &relation{}
 	o.Hydrate(data)
 	return o
 }
 
 // == METHODS =================================================================
 
-func (o *groupEntityRelation) IsSoftDeleted() bool {
+func (o *relation) IsSoftDeleted() bool {
 	return o.SoftDeletedAtCarbon().Compare("<", carbon.Now(carbon.UTC))
 }
 
 // == SETTERS AND GETTERS =====================================================
 
-func (o *groupEntityRelation) CreatedAt() string {
+func (o *relation) CreatedAt() string {
 	return o.Get(COLUMN_CREATED_AT)
 }
 
-func (o *groupEntityRelation) CreatedAtCarbon() *carbon.Carbon {
+func (o *relation) CreatedAtCarbon() *carbon.Carbon {
 	return carbon.Parse(o.CreatedAt(), carbon.UTC)
 }
 
-func (o *groupEntityRelation) SetCreatedAt(createdAt string) GroupEntityRelationInterface {
+func (o *relation) SetCreatedAt(createdAt string) RelationInterface {
 	o.Set(COLUMN_CREATED_AT, createdAt)
 	return o
 }
 
-func (o *groupEntityRelation) EntityType() string {
+func (o *relation) EntityType() string {
 	return o.Get(COLUMN_ENTITY_TYPE)
 }
 
-func (o *groupEntityRelation) SetEntityType(entityType string) GroupEntityRelationInterface {
+func (o *relation) SetEntityType(entityType string) RelationInterface {
 	o.Set(COLUMN_ENTITY_TYPE, entityType)
 	return o
 }
 
-func (o *groupEntityRelation) EntityID() string {
+func (o *relation) EntityID() string {
 	return o.Get(COLUMN_ENTITY_ID)
 }
 
-func (o *groupEntityRelation) SetEntityID(entityID string) GroupEntityRelationInterface {
+func (o *relation) SetEntityID(entityID string) RelationInterface {
 	o.Set(COLUMN_ENTITY_ID, entityID)
 	return o
 }
 
-func (o *groupEntityRelation) ID() string {
+func (o *relation) ID() string {
 	return o.Get(COLUMN_ID)
 }
 
-func (o *groupEntityRelation) SetID(id string) GroupEntityRelationInterface {
+func (o *relation) SetID(id string) RelationInterface {
 	o.Set(COLUMN_ID, id)
 	return o
 }
 
-func (o *groupEntityRelation) Memo() string {
+func (o *relation) Memo() string {
 	return o.Get(COLUMN_MEMO)
 }
 
-func (o *groupEntityRelation) SetMemo(memo string) GroupEntityRelationInterface {
+func (o *relation) SetMemo(memo string) RelationInterface {
 	o.Set(COLUMN_MEMO, memo)
 	return o
 }
 
-func (o *groupEntityRelation) Metas() (map[string]string, error) {
+func (o *relation) Metas() (map[string]string, error) {
 	metasStr := o.Get(COLUMN_METAS)
 
 	if metasStr == "" {
@@ -114,9 +114,8 @@ func (o *groupEntityRelation) Metas() (map[string]string, error) {
 	return maputils.MapStringAnyToMapStringString(metasJson.(map[string]any)), nil
 }
 
-func (o *groupEntityRelation) Meta(name string) string {
+func (o *relation) Meta(name string) string {
 	metas, err := o.Metas()
-
 	if err != nil {
 		return ""
 	}
@@ -128,13 +127,13 @@ func (o *groupEntityRelation) Meta(name string) string {
 	return ""
 }
 
-func (o *groupEntityRelation) SetMeta(name, value string) error {
+func (o *relation) SetMeta(name, value string) error {
 	return o.UpsertMetas(map[string]string{name: value})
 }
 
 // SetMetas stores metas as json string
 // Warning: it overwrites any existing metas
-func (o *groupEntityRelation) SetMetas(metas map[string]string) error {
+func (o *relation) SetMetas(metas map[string]string) error {
 	mapString, err := utils.ToJSON(metas)
 	if err != nil {
 		return err
@@ -143,7 +142,7 @@ func (o *groupEntityRelation) SetMetas(metas map[string]string) error {
 	return nil
 }
 
-func (o *groupEntityRelation) UpsertMetas(metas map[string]string) error {
+func (o *relation) UpsertMetas(metas map[string]string) error {
 	currentMetas, err := o.Metas()
 
 	if err != nil {
@@ -157,37 +156,37 @@ func (o *groupEntityRelation) UpsertMetas(metas map[string]string) error {
 	return o.SetMetas(currentMetas)
 }
 
-func (o *groupEntityRelation) SoftDeletedAt() string {
+func (o *relation) SoftDeletedAt() string {
 	return o.Get(COLUMN_SOFT_DELETED_AT)
 }
 
-func (o *groupEntityRelation) SoftDeletedAtCarbon() *carbon.Carbon {
+func (o *relation) SoftDeletedAtCarbon() *carbon.Carbon {
 	return carbon.Parse(o.SoftDeletedAt(), carbon.UTC)
 }
 
-func (o *groupEntityRelation) SetSoftDeletedAt(deletedAt string) GroupEntityRelationInterface {
+func (o *relation) SetSoftDeletedAt(deletedAt string) RelationInterface {
 	o.Set(COLUMN_SOFT_DELETED_AT, deletedAt)
 	return o
 }
 
-func (o *groupEntityRelation) GroupID() string {
+func (o *relation) GroupID() string {
 	return o.Get(COLUMN_GROUP_ID)
 }
 
-func (o *groupEntityRelation) SetGroupID(roleID string) GroupEntityRelationInterface {
+func (o *relation) SetGroupID(roleID string) RelationInterface {
 	o.Set(COLUMN_GROUP_ID, roleID)
 	return o
 }
 
-func (o *groupEntityRelation) UpdatedAt() string {
+func (o *relation) UpdatedAt() string {
 	return o.Get(COLUMN_UPDATED_AT)
 }
 
-func (o *groupEntityRelation) UpdatedAtCarbon() *carbon.Carbon {
+func (o *relation) UpdatedAtCarbon() *carbon.Carbon {
 	return carbon.Parse(o.Get(COLUMN_UPDATED_AT), carbon.UTC)
 }
 
-func (o *groupEntityRelation) SetUpdatedAt(updatedAt string) GroupEntityRelationInterface {
+func (o *relation) SetUpdatedAt(updatedAt string) RelationInterface {
 	o.Set(COLUMN_UPDATED_AT, updatedAt)
 	return o
 }
